@@ -5,6 +5,20 @@
   "description": "Mobile first web app that creates self-guided audio tours around the users location",
   "author": "Team Balenciaga",
   "license": "BSD-2-Clause",
+  "scripts": {
+    "clean": "rimraf build/",
+    "build": "npm run build:server && npm run build:app",
+    "build:server": "echo 'No server script specified'",
+    "build:app": "npm run build:css && npm run build:js",
+    "build:css": "node-sass --source-map=true app/styles.scss bundle.css",
+    "build:js": "webpack",
+    "watch:app": "parallelshell 'npm run watch:js -s' 'npm run watch:css -s'",
+    "watch:js": "nodemon -q -w app/ --ext 'js,html' --exec 'npm run build:js'",
+    "watch:css": "nodemon -q -w app/ --ext 'scss' --exec 'npm run build:css'",
+    "serve": "http-server -p 9090 -c-1 build/app",
+    "live-reload": "live-reload --port 9091 build/app",
+    "app-dev": "parallelshell 'npm run live-reload -s' 'npm run serve -s' 'npm run watch:app -s'"
+  },
   "dependencies": {
     "react": "~0.13.3"
   },
