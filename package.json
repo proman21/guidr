@@ -20,7 +20,7 @@
     "app-dev": "parallelshell 'npm run live-reload -s' 'npm run serve -s' 'npm run watch:app -s'",
     "deploy": "git pull origin master && npm install && npm run build && npm install",
     "prod-install": "cp -r build/* /var/www/htdocs",
-    "start-deploy-hook": "forever start --uid deploy-hook --killSignal=SIGTERM -c nodemon --exitcrash deploy-hook-server.js",
+    "start-deploy-hook": "forever start --uid 'deploy-hook' -w deploy-hook-server.js",
     "stop-deploy-hook": "forever stop deploy-hook"
   },
   "dependencies": {
