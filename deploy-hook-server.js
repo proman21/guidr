@@ -1,7 +1,7 @@
 var hook_server = require("github-webhook");
 var server = hook_server({
   "port": 9080,
-  "path": "/deploy",
+  "path": "/webhooks/deploy",
   "secret": "deco1800Deploy",
   "log": "./webhook.log",
   "rules": [{
