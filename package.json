@@ -10,7 +10,7 @@
     "build": "npm run build:server && npm run build:app",
     "build:server": "echo 'No server script specified'",
     "build:app": "npm run build:css && npm run build:js",
-    "build:css": "node-sass --source-map=true app/styles.scss bundle.css",
+    "build:css": "node-sass --source-map=true src/app/styles.scss -o build/ build/app/bundle.css",
     "build:js": "webpack",
     "watch:app": "parallelshell 'npm run watch:js -s' 'npm run watch:css -s'",
     "watch:js": "nodemon -q -w app/ --ext 'js,html' --exec 'npm run build:js'",
@@ -31,6 +31,7 @@
     "babel-core": "~5.8.22",
     "babel-loader": "~5.3.2",
     "eslint": "~1.3.1",
-    "babel-eslint": "~4.1.1"
+    "babel-eslint": "~4.1.1",
+    "node-sass": "~3.3.2"
   }
 }
