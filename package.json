@@ -18,8 +18,9 @@
     "serve": "http-server -p 9090 -c-1 build/app",
     "live-reload": "live-reload --port 9091 build/app",
     "app-dev": "parallelshell 'npm run live-reload -s' 'npm run serve -s' 'npm run watch:app -s'",
-    "deploy": "git pull && npm run build && npm install",
-    "install": "cp -r build/* /var/www/htdocs"
+    "deploy": "git pull && npm install && npm run build && npm install",
+    "prod-install": "cp -r build/* /var/www/htdocs",
+    "start-deploy-hook": "forever start deploy-hook-server.js"
   },
   "dependencies": {
     "react": "~0.13.3"
