@@ -1,0 +1,30 @@
+.homepage {
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(space-around);
+  @include align-items(center);
+
+  background-color: transparentize(#D7CC1B, .2);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+
+  h1 {
+    font-size: 5.1em;
+  }
+
+  .large-button {
+    p {
+      display: inline-block;
+      margin: 0;
+    }
+
+    i {
+      margin: 0 5px;
+      color: #68D15D;
+    }
+  }
+}
