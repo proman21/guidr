@@ -1,4 +1,5 @@
-
+import fetch from 'fetch-jsonp';
+import URIT from 'uri-templates';
 
 /**
  * The list of places that are currently being worked with
@@ -10,31 +11,20 @@ var trovePlaces = [];
  * The zone to search trove for information
  * @type {string}
  */
-var troveZone = "newspaper";
+const TROVE_ZONE = "newspaper";
 
 /**
  * The API key for searching trove
  * @type {string}
  */
-var troveKey = "miqepgv07q9ktath";
+const TROVE_KEY = "miqepgv07q9ktath";
 
+const TROVE_URI = new URIT("http://api.trove.nla.gov.au/result{?params*}");
 /**
  * The number of results to be returned from a trove search
  * @type {number}
  */
-var numberOfResults = 20;
-
-/**
- * Attempts to get the users location
- * @param callback The function to run on success
- */
-function getCurrentLocation(callback) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(callback, logLocationError);
-    } else {
-        console.log("Location not supported");
-    }
-}
+const NUM_RESULTS = 20;
 
 /**
  * Returns an array of Place objects that trove and the places API both have info on
@@ -44,15 +34,15 @@ function getCurrentLocation(callback) {
  * @param interests An array of strings representing the interests for the places
  * @param radius The radius in which to search
  */
-function getPlaces(mapObject, latitude, longitude, interests, radius) {
-    var location = new google.maps.LatLng(latitude, longitude);
-    var request = {
+export function getPlaces(mapObject, latitude, longitude, interests, radius) {
+    let location = new google.maps.LatLng(latitude, longitude);
+    let request = {
         location: location,
         radius: radius,
         types: interests
     };
 
-    var service = new google.maps.places.PlacesService(mapObject);
+    let service = new google.maps.places.PlacesService(mapObject);
     service.nearbySearch(request, placesSearchCallback);
 
 }
@@ -62,10 +52,10 @@ function getPlaces(mapObject, latitude, longitude, interests, radius) {
  * @param results
  * @param status
  */
-function placesSearchCallback(results, status) {
+export function placesSearchCallback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
-            var res = results[i];
+            let res = results[i];
             if (res.opening_hours.open_now)
                 checkTrove(results[i]);
         }
@@ -77,16 +67,23 @@ function placesSearchCallback(results, status) {
  * Checks if trove has the place given, and adds it to the list if it contains data
  * @param place
  */
-function checkTrove(place) {
-    var data = {"key":troveKey,"zone":troveZone,"q":encodeURI(place.vicinity), "n":numberOfResults, "encoding":"JSON"};
-    $.ajax({
-        url: "http://api.trove.nla.gov.au/result",
-        dataType: JSON,
-        type:"GET",
-        data:data,
-        success: function (msg) {
-            if (msg['zone'][0]['records']['n'] != 0) //check if any results were returned
-                trovePlaces.push({"troveData":msg, "placesData": place});
+export function checkTrove(place) {
+    let params = {
+      "key": TROVE_KEY,
+      "zone": TROVE_ZONE,
+      "q": encodeURI(place.vicinity),
+      "n": NUM_RESULTS,
+      "encoding": "json"
+    };
+    
+    fetch(TROVE_URI.fillFromObject({ params }))
+    .then(data => data.json())
+    .then(msg => {
+        if (msg.zone[0].records.n != 0) { //check if any results were returned
+          trovePlaces.push({
+            "troveData":msg,
+            "placesData": place
+          });
         }
     });
 }
@@ -99,7 +96,7 @@ function checkTrove(place) {
  * @param title The title that is displayed when the marker is clicked
  * @param article The information object for the location
  */
-function createMarker(map, latitude, longitude, title, article) {
+export function createMarker(map, latitude, longitude, title, article) {
 
 }
 
@@ -107,7 +104,7 @@ function createMarker(map, latitude, longitude, title, article) {
  * For development purposes, logs the error from a location call
  * @param error
  */
-function logLocationError(error) {
+export function logLocationError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
             console.log("User denied the request for Geolocation");
