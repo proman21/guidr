@@ -79,7 +79,7 @@ export default class Map extends Component {
 
   componentDidMount() {
       if (!this.props.background) {
-        let geo = new Promise((resolve, reject) => {
+        new Promise((resolve, reject) => {
           geolocation.getCurrentPosition(resolve, reject);
         }).then(position => {
           let userLoc = new google.maps.LatLng(
@@ -88,7 +88,7 @@ export default class Map extends Component {
                   );
           this.setState({ user: userLoc });
           this.state.place ? this.showDirections() : null;
-        }).catch(reason => console.error("Geolocation service failed"));
+        }).catch(reason => console.error(`Geolocation service failed: ${reason}`));
       }
   }
 }
