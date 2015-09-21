@@ -24,7 +24,7 @@ export default class Map extends Component {
 
   render() {
     let overlay;
-    
+
     if(!this.props.background) {
       overlay = (<div className="overlay">
                   <Controls />
@@ -79,16 +79,16 @@ export default class Map extends Component {
 
   componentDidMount() {
       if (!this.props.background) {
-          geolocation.getCurrentPosition((position) => {
-              var userLoc = new google.maps.LatLng(
-                      position.coords.latitude,
-                      position.coords.longitude
-                      );
-              this.setState({ user: userLoc });
-              this.state.place ? this.showDirections() : null;
-          }, (reason) => {
-              console.error("Geolocation service failed");
-          });
+        let geo = new Promise((resolve, reject) => {
+          geolocation.getCurrentPosition(resolve, reject);
+        }).then(position => {
+          let userLoc = new google.maps.LatLng(
+                  position.coords.latitude,
+                  position.coords.longitude
+                  );
+          this.setState({ user: userLoc });
+          this.state.place ? this.showDirections() : null;
+        }).catch(reason => console.error("Geolocation service failed"));
       }
   }
 }
