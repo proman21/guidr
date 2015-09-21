@@ -19,6 +19,12 @@ var troveZone = "newspaper";
 var troveKey = "miqepgv07q9ktath";
 
 /**
+ * The number of results to be returned from a trove search
+ * @type {number}
+ */
+var numberOfResults = 20;
+
+/**
  * Attempts to get the users location
  * @param callback The function to run on success
  */
@@ -104,16 +110,16 @@ function createMarker(map, latitude, longitude, title, article) {
 function logLocationError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            console.log("User denied the request for Geolocation.");
+            console.log("User denied the request for Geolocation");
             break;
         case error.POSITION_UNAVAILABLE:
-            console.log("Location unavailable.");
+            console.log("Location unavailable");
             break;
         case error.TIMEOUT:
-            console.log("Location timed out.");
+            console.log("Location timed out");
             break;
         default:
-            console.log("Unknown error.");
+            console.log("Unknown error");
             break;
     }
 }
