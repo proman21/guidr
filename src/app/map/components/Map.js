@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {GoogleMap, Marker} from "react-google-maps";
+import {GoogleMap, Marker, DirectionsRenderer} from "react-google-maps";
 import Controls from "./Controls";
 import InfoWindow from "./InfoWindow";
 
@@ -59,15 +59,6 @@ export default class Map extends Component {
       this.setState({ marker: details });
   }
 
-  updateUserLocation(position) {
-      var userLoc = new google.maps.LatLng(
-              position.coords.latitude,
-              position.coords.longitude
-              );
-      this.setState({ user: userLoc });
-      this.showDirections();
-  }
-
   setPlace(place) {
       this.setState({ place: place });
   }
@@ -87,15 +78,17 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
-      geolocation.getCurrentPosition((position) => {
-          var userLoc = new google.maps.LatLng(
-                  position.coords.latitude,
-                  position.coords.longitude
-                  );
-          this.setState({ user: userLoc });
-          this.state.place ? this.showDirections() : null;
-      }, (reason) => {
-          console.error("Geolocation service failed");
-      });
+      if (!this.props.background) {
+          geolocation.getCurrentPosition((position) => {
+              var userLoc = new google.maps.LatLng(
+                      position.coords.latitude,
+                      position.coords.longitude
+                      );
+              this.setState({ user: userLoc });
+              this.state.place ? this.showDirections() : null;
+          }, (reason) => {
+              console.error("Geolocation service failed");
+          });
+      }
   }
 }
