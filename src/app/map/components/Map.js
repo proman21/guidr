@@ -14,18 +14,16 @@ const geolocation = (
 export default class Map extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
-
-  render() {
-    let overlay;
-
-    state = {
+    this.state = {
         marker: null,
         directions: null,
         user: null,
         place: null,
     };
+  }
+
+  render() {
+    let overlay;
     
     if(!this.props.background) {
       overlay = (<div className="overlay">
@@ -47,42 +45,40 @@ export default class Map extends Component {
         zoomControl={false}
         scaleControl={false}
         streetViewControl={false}>
-        {directions ? <DirectionsRenderer directions={directions} /> : null}
-        {place ? <Marker {...marker} /> : null}
+        {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
+        {this.state.place ? <Marker {...this.state.marker} /> : null}
       </GoogleMap>
     </div>);
   }
 
-  createMarker = () => {
+  createMarker() {
       var details = {
-          position: state.place.geometry.location,
-          key: state.place.name
+          position: this.state.place.geometry.location,
+          key: this.state.place.name
       }
       this.setState({ marker: details });
   }
 
-  updateUserLocation = (position) {
+  updateUserLocation(position) {
       var userLoc = new google.maps.LatLng(
               position.coords.latitude,
               position.coords.longitude
               );
       this.setState({ user: userLoc });
-      showDirections();
+      this.showDirections();
   }
 
-  setPlace = (place) {
+  setPlace(place) {
       this.setState({ place: place });
   }
 
-  showDirections = () => {
+  showDirections() {
       const directionsService = new google.maps.DirectionService();
-        request = {
-          origin: state.user,
-          destination: state.place.geometry.location,
+      request = {
+          origin: this.state.user,
+          destination: this.state.place.geometry.location,
           travelMode: google.maps.TravelMode.WALKING
-        }
       };
-
       directionsService.route(request, (result, status) => {
           if (status == google.maps.DirectionsStatus.OK) {
               this.setState({ directions: result });
@@ -90,6 +86,16 @@ export default class Map extends Component {
       });
   }
 
-  navigator.watchPosition(updateUserLocation);
-
+  componentDidMount() {
+      geolocation.getCurrentPosition((position) => {
+          var userLoc = new google.maps.LatLng(
+                  position.coords.latitude,
+                  position.coords.longitude
+                  );
+          this.setState({ user: userLoc });
+          this.state.place ? this.showDirections() : null;
+      }, (reason) => {
+          console.error("Geolocation service failed");
+      });
+  }
 }
