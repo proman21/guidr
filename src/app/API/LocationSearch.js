@@ -1,3 +1,23 @@
+
+
+/**
+ * The list of places that are currently being worked with
+ * @type {Array}
+ * @format {troveData, placesData}
+ */
+var trovePlaces = [];
+/**
+ * The zone to search trove for information
+ * @type {string}
+ */
+var troveZone = "newspaper";
+
+/**
+ * The API key for searching trove
+ * @type {string}
+ */
+var troveKey = "miqepgv07q9ktath";
+
 /**
  * Attempts to get the users location
  * @param callback The function to run on success
@@ -46,27 +66,18 @@ function placesSearchCallback(results, status) {
     }
 }
 
-/**
- * The list of places that are currently being worked with
- * @type {Array}
- * @format {troveData, placesData}
- */
-var trovePlaces = [];
-/**
- * The zone to search trove for information
- * @type {string}
- */
-var troveZone = "newspaper";
 
 /**
  * Checks if trove has the place given, and adds it to the list if it contains data
  * @param place
  */
 function checkTrove(place) {
+    var data = {"key":troveKey,"zone":troveZone,"q":encodeURI(place.vicinity), "n":numberOfResults, "encoding":"JSON"};
     $.ajax({
-        url: "http://api.trove.nla.gov.au/result?key=miqepgv07q9ktath&zone="+troveZone+"&q="
-            + encodeURI(place.vicinity) + "&n=20&encoding=json",
+        url: "http://api.trove.nla.gov.au/result",
         dataType: JSON,
+        type:"GET",
+        data:data,
         success: function (msg) {
             if (msg['zone'][0]['records']['n'] != 0) //check if any results were returned
                 trovePlaces.push({"troveData":msg, "placesData": place});
