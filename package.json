@@ -7,16 +7,16 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "clean": "rimraf build/",
-    "build": "npm run build:server && npm run build:app",
-    "build:server": "echo 'No server script specified'",
-    "build:app": "npm run build:js && npm run build:css",
-    "build:css": "node-sass --source-map=true src/app/styles.scss build/app/bundle.css",
+    "build": "npm run build:js && npm run build:css && npm run build:static",
+    "build:css": "node-sass --source-map=true src/styles.scss build/bundle.css",
     "build:js": "webpack",
-    "watch:app": "parallelshell 'npm run watch:js -s' 'npm run watch:css -s'",
+    "build:static": "cp -ru public/. build/",
+    "watch": "parallelshell 'npm run watch:js -s' 'npm run watch:css -s' 'npm run watch:static -s'",
     "watch:js": "webpack --watch",
-    "watch:css": "nodemon -q -w app/ --ext 'scss' --exec 'npm run build:css'",
-    "serve": "http-server -p 9090 -c-1 build/app",
-    "app-dev": "parallelshell 'npm run serve -s' 'npm run watch:app -s'"
+    "watch:css": "nodemon -q -w src/ --ext 'scss' --exec 'npm run build:css'",
+    "watch:static": "nodemon -q -w public/ --exec 'npm run build:static'",
+    "serve": "http-server -p 9090 -c-1 build",
+    "app-dev": "parallelshell 'npm run serve -s' 'npm run watch -s'"
   },
   "dependencies": {
     "react": "~0.13.3",

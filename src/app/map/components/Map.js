@@ -3,14 +3,6 @@ import {GoogleMap, Marker, DirectionsRenderer} from "react-google-maps";
 import Controls from "./Controls";
 import InfoWindow from "./InfoWindow";
 
-const geolocation = (
-    "undefined" !== typeof window && navigator && navigator.geolocation || {
-        getCurrentPosition: (success, failure) => {
-            failure("Your browser does not support geolocation.");
-        },
-    }
-);
-
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -18,8 +10,63 @@ export default class Map extends Component {
         marker: null,
         directions: null,
         user: null,
-        place: null,
+        place: null
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.refs.map.state.map.setOptions({
+      zoomControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      mapTypeControlOptions: {
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        position: google.maps.ControlPosition.TOP_RIGHT
+      },
+    });
+  }
+
+  componentDidMount() {
+      if (!this.props.background && this.props.useLocation) {
+        geolocation.watchPosition(position => {
+          let userLoc = new google.maps.LatLng(position.coords.latitude,
+                                               position.coords.longitude);
+          this.setState({ user: userLoc });
+          this.state.place ? this.showDirections() : null;
+        }, reason => console.error(`Geolocation service failed: ${reason}`));
+    } else if(!this.props.useLocation) {
+      this.setState({ user: this.props.location });
+    }
+  }
+
+  componentWillUnmount() {
+    geolocation.clearWatch();
+  }
+
+  createMarker() {
+    var details = {
+      position: this.state.place.geometry.location,
+      key: this.state.place.name
+    }
+    this.setState({ marker: details });
+  }
+
+  setPlace(place) {
+    this.setState({ place: place });
+  }
+
+  showDirections() {
+    let directionsService = new google.maps.DirectionService();
+    request = {
+      origin: this.state.user,
+      destination: this.state.place.geometry.location,
+      travelMode: google.maps.TravelMode.WALKING
+    };
+    directionsService.route(request, (result, status) => {
+      if (status == google.maps.DirectionsStatus.OK) {
+        this.setState({ directions: result });
+      }
+    });
   }
 
   render() {
@@ -41,54 +88,12 @@ export default class Map extends Component {
         }}
         ref="map"
         defaultCenter={{lat: -27.4684182, lng: 153.0241399}}
-        defaultZoom={15}
-        zoomControl={false}
-        scaleControl={false}
-        streetViewControl={false}>
+        defaultZoom={15}>
         {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
         {this.state.place ? <Marker {...this.state.marker} /> : null}
+        {this.state.user ? <Marker position={this.state.user}
+          icon="http://chadkillingsworth.github.io/geolocation-marker/images/gpsloc.png"/> : null}
       </GoogleMap>
     </div>);
-  }
-
-  createMarker() {
-      var details = {
-          position: this.state.place.geometry.location,
-          key: this.state.place.name
-      }
-      this.setState({ marker: details });
-  }
-
-  setPlace(place) {
-      this.setState({ place: place });
-  }
-
-  showDirections() {
-      const directionsService = new google.maps.DirectionService();
-      request = {
-          origin: this.state.user,
-          destination: this.state.place.geometry.location,
-          travelMode: google.maps.TravelMode.WALKING
-      };
-      directionsService.route(request, (result, status) => {
-          if (status == google.maps.DirectionsStatus.OK) {
-              this.setState({ directions: result });
-          }
-      });
-  }
-
-  componentDidMount() {
-      if (!this.props.background) {
-        new Promise((resolve, reject) => {
-          geolocation.getCurrentPosition(resolve, reject);
-        }).then(position => {
-          let userLoc = new google.maps.LatLng(
-                  position.coords.latitude,
-                  position.coords.longitude
-                  );
-          this.setState({ user: userLoc });
-          this.state.place ? this.showDirections() : null;
-        }).catch(reason => console.error(`Geolocation service failed: ${reason}`));
-      }
   }
 }

@@ -16,36 +16,35 @@
     @include display(flex);
     @include flex-direction(row);
     @include align-items(center);
+    @include justify-content(center);
     height: 16.6%;
 
-    span {
-       @include flex(1);
+    .button {
        @include flex-basis(auto);
+       @include flex(0);
        @include flex-grow(0);
 
        i {
+         @include user-select(none);
          margin: 0 5px;
        }
     }
 
     .title-wrap {
-      @include flex(2);
-      @include flex-grow(1);
-
-      h1 {
-        @include user-select(none);
-        text-align: center;
-      }
+      @include flex(1);
+      @include flex-grow(0);
+      @include user-select(none);
+      text-align: center;
     }
   }
 
   // when the drawer is opening
   &.open {
-    top:calc(100% - 75%);
+    @include transform(translateY(calc(100% - 75%)));
   }
 
   // when the drawer is closing
   &.close {
-    top: calc(100% - 16.6%);
+    @include transform(translateY(calc(100% - 16.6%)));
   }
 }
