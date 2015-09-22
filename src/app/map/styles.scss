@@ -32,7 +32,7 @@
 
     .title-wrap {
       @include flex(1);
-      @include flex-grow(0);
+      @include flex-grow(1);
       @include user-select(none);
       text-align: center;
     }
