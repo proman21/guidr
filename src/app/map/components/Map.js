@@ -9,7 +9,7 @@ export default class Map extends Component {
     this.state = {
         marker: null,
         directions: null,
-        user: null,
+        user: {lat: -27.499622, lng: 153.014579},
         place: null
     };
   }
@@ -31,6 +31,7 @@ export default class Map extends Component {
         geolocation.watchPosition(position => {
           let userLoc = new google.maps.LatLng(position.coords.latitude,
                                                position.coords.longitude);
+          console.log(userLoc);
           this.setState({ user: userLoc });
           this.state.place ? this.showDirections() : null;
         }, reason => console.error(`Geolocation service failed: ${reason}`));
@@ -87,12 +88,11 @@ export default class Map extends Component {
           },
         }}
         ref="map"
-        defaultCenter={{lat: -27.4684182, lng: 153.0241399}}
+        defaultCenter={this.state.user}
         defaultZoom={15}>
-        {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
-        {this.state.place ? <Marker {...this.state.marker} /> : null}
-        {this.state.user ? <Marker position={this.state.user}
-          icon="http://chadkillingsworth.github.io/geolocation-marker/images/gpsloc.png"/> : null}
+        // {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
+        // {this.state.place ? <Marker {...this.state.marker} /> : null}
+        <Marker position={this.state.user} animation={google.maps.Animation.DROP} key="user"/>
       </GoogleMap>
     </div>);
   }
