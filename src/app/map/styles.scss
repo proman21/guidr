@@ -13,6 +13,7 @@
   transition: top .5s ease-out;
 
   .top-bar {
+    @include flex-wrap(wrap);
     @include display(flex);
     @include flex-direction(row);
     @include align-items(center);

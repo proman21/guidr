@@ -28,6 +28,7 @@ export default class Map extends Component {
 
   componentDidMount() {
       if (!this.props.background && this.props.useLocation) {
+        console.log("Location");
         geolocation.watchPosition(position => {
           let userLoc = new google.maps.LatLng(position.coords.latitude,
                                                position.coords.longitude);

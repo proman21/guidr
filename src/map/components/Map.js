@@ -28,6 +28,7 @@ export default class Map extends Component {
 
   componentDidMount() {
       if (!this.props.background && this.props.useLocation) {
+        console.log("Location");
         geolocation.watchPosition(position => {
           let userLoc = new google.maps.LatLng(position.coords.latitude,
                                                position.coords.longitude);
@@ -92,7 +93,7 @@ export default class Map extends Component {
         defaultZoom={15}>
         // {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
         // {this.state.place ? <Marker {...this.state.marker} /> : null}
-        <Marker position={{lat: -27.499622, lng: 153.014579}}/>
+        <Marker icon="http://chadkillingsworth.github.io/geolocation-marker/images/gpsloc.png" position={{lat: -27.499622, lng: 153.014579}}/>
         <Marker position={{lat: -27.498788, lng: 153.024369}}/>
         <Marker position={{lat: -27.484843, lng: 153.024777}}/>
         <Marker position={{lat: -27.485528, lng: 152.992676}}/>
@@ -101,4 +102,3 @@ export default class Map extends Component {
     </div>);
   }
 }
-
