@@ -93,11 +93,7 @@ export default class Map extends Component {
         defaultZoom={15}>
         // {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
         // {this.state.place ? <Marker {...this.state.marker} /> : null}
-        <Marker icon="http://chadkillingsworth.github.io/geolocation-marker/images/gpsloc.png" position={{lat: -27.499622, lng: 153.014579}}/>
-        <Marker position={{lat: -27.498788, lng: 153.024369}}/>
-        <Marker position={{lat: -27.484843, lng: 153.024777}}/>
-        <Marker position={{lat: -27.485528, lng: 152.992676}}/>
-        <Marker position={{lat: -27.506237, lng: 153.013018}}/>
+        <Marker position={this.state.user}/>
       </GoogleMap>
     </div>);
   }
