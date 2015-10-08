@@ -17,6 +17,6 @@
     "no-underscore-dangle": [0],
     "strict": 0,
     "no-unreachable": 1,
-    "no-unused-vars": 1
+    "no-unused-vars": 0
   }
 }

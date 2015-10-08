@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, addons as ReactUtils} from "react";
 import {GoogleMap, Marker, DirectionsRenderer} from "react-google-maps";
 import Controls from "./Controls";
 import InfoWindow from "./InfoWindow";
@@ -9,8 +9,8 @@ export default class Map extends Component {
     this.state = {
         marker: null,
         directions: null,
-        user: {lat: -27.499622, lng: 153.014579},
-        place: null
+        place: null,
+        currentFocus: null
     };
   }
 
@@ -24,21 +24,6 @@ export default class Map extends Component {
         position: google.maps.ControlPosition.TOP_RIGHT
       },
     });
-  }
-
-  componentDidMount() {
-      if (!this.props.background && this.props.useLocation) {
-        console.log("Location");
-        geolocation.watchPosition(position => {
-          let userLoc = new google.maps.LatLng(position.coords.latitude,
-                                               position.coords.longitude);
-          console.log(userLoc);
-          this.setState({ user: userLoc });
-          this.state.place ? this.showDirections() : null;
-        }, reason => console.error(`Geolocation service failed: ${reason}`));
-    } else if(!this.props.useLocation) {
-      this.setState({ user: this.props.location });
-    }
   }
 
   componentWillUnmount() {
@@ -60,7 +45,7 @@ export default class Map extends Component {
   showDirections() {
     let directionsService = new google.maps.DirectionService();
     request = {
-      origin: this.state.user,
+      origin: this.props.userLoc,
       destination: this.state.place.geometry.location,
       travelMode: google.maps.TravelMode.WALKING
     };
@@ -75,10 +60,10 @@ export default class Map extends Component {
     let overlay;
 
     if(!this.props.background) {
-      overlay = (<div className="overlay">
-                  <Controls />
-                  <InfoWindow />
-                </div>);
+      overlay = ReactUtils.createFragment({
+        controls: <Controls />,
+        info_window: <InfoWindow />
+      });
     }
     return (<div className="map-wrap">
       {overlay}
@@ -89,11 +74,12 @@ export default class Map extends Component {
           },
         }}
         ref="map"
-        defaultCenter={this.state.user}
+        center={this.state.currentFocus || this.props.userLoc}
         defaultZoom={15}>
         // {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
         // {this.state.place ? <Marker {...this.state.marker} /> : null}
-        <Marker position={this.state.user}/>
+        <Marker position={this.props.userLoc} key="user"
+        icon="http://i.stack.imgur.com/orZ4x.png" />
       </GoogleMap>
     </div>);
   }

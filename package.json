@@ -19,27 +19,28 @@
     "app-dev": "parallelshell 'npm run serve -s' 'npm run watch -s'"
   },
   "dependencies": {
-    "react": "~0.13.3",
-    "react-google-maps": "~2.1.0",
-    "react-gestures": "~0.1.8",
     "classnames": "~2.1.3",
-    "react-modal": "~0.3.0",
-    "react-responsive-carousel": "~0.1.6",
     "fetch-jsonp": "~0.9.2",
+    "react": "~0.13.3",
+    "react-gestures": "~0.1.8",
+    "react-google-maps": "~2.1.0",
+    "react-modal": "~0.3.0",
+    "react-responsive-carousel": "^0.1.6",
     "uri-templates": "~0.1.7"
   },
   "devDependencies": {
-    "webpack": "~1.12.0",
     "babel-core": "~5.8.22",
+    "babel-eslint": "~4.1.1",
     "babel-loader": "~5.3.2",
     "eslint": "~1.3.1",
-    "babel-eslint": "~4.1.1",
-    "node-sass": "~3.3.2",
+    "file-loader": "~0.8.4",
     "github-webhook": "~1.1.2",
-    "parallelshell": "~2.0.0",
     "http-server": "~0.8.0",
     "live-reload": "~1.1.0",
+    "node-sass": "~3.3.2",
     "nodemon": "~1.5.0",
-    "file-loader": "~0.8.4"
+    "parallelshell": "~2.0.0",
+    "scss-lint": "0.0.0",
+    "webpack": "~1.12.0"
   }
 }
