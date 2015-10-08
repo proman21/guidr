@@ -4,6 +4,13 @@ import cls from "classnames";
 export default class Homepage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      interestInput: ""
+    }
+  }
+
+  changeInterests(event) {
+    this.setState({ interestInput: event.target.value });
   }
 
   render() {
@@ -16,8 +23,11 @@ export default class Homepage extends Component {
       </button>
       <p>OR</p>
       <form className="search-form">
-        <input type="search" placeholder="Enter Interests" />
-        <button type="submit">
+        <input type="search"
+        placeholder="Enter Interests e.g. brewing, historic"
+        value={this.state.interestInput}
+        onChange={this.changeInterests.bind(this)} />
+        <button type="submit" onClick={this.props.useInterests(this.state.interestInput)}>
           <i className="fa fa-search fa-3"></i>
         </button>
       </form>
