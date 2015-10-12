@@ -8,6 +8,9 @@ export default class Controls extends Component {
 
   render() {
     return (<div className="control-wrap">
+      <span className="user-loc" onClick={this.props.centerLoc}>
+        <i className="fa fa-crosshairs"></i>
+      </span>
       <span className="exit-controls">
 
       </span>
