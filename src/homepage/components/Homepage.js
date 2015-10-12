@@ -9,7 +9,7 @@ export default class Homepage extends Component {
   render() {
     let homeCls = cls("homepage", { hide: !this.props.show });
     return (<div className={homeCls}>
-      <h1>GUIDR</h1>
+      <img src="logo.png">
       <button className="large-button" onClick={this.props.useLocation}>
         <i className="fa fa-location-arrow fa-3"></i>
         <p className="button-name">Use Current Location</p>
