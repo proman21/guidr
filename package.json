@@ -15,7 +15,7 @@
     "watch:js": "webpack --watch",
     "watch:css": "nodemon -q -w src/ --ext 'scss' --exec 'npm run build:css'",
     "watch:static": "nodemon -q -w public/ --exec 'npm run build:static'",
-    "serve": "http-server -p 9090 -c-1 build",
+    "serve": "http-server -p 9090 -a 0.0.0.0 -c-1 build",
     "app-dev": "parallelshell 'npm run serve -s' 'npm run watch -s'"
   },
   "dependencies": {

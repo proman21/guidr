@@ -57,10 +57,11 @@
     }
   }
 
-  h1 {
+  .logo {
     @include flex(0);
     flex-basis: auto;
     font-size: 5.1em;
+    max-height: 200px;
   }
 
   p {
