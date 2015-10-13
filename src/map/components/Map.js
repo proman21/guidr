@@ -11,11 +11,12 @@ export default class Map extends Component {
         directions: null,
         currPlaceIndex: 0,
         places: [{
+          name: "Brisbane City Hall",
+          showTitle: false,
           geometry: {
             location: { lat: -27.468124, lng: 153.023801 }
           }
         }],
-        currentFocus: null,
         mode: "travelling"
     };
   }
@@ -85,7 +86,11 @@ export default class Map extends Component {
       } else {
         // render a normal marker
         return (<Marker position={place.geometry.location} key={i}
-                 onClick={this.showMarkerName().bind(this, i)}/>);
+                onClick={this.showMarkerName().bind(this, i)}>
+                  {place.showTitle ? <InfoWindow key={`info_win_$(i)`}>
+                    <strong>{place.name}</strong>
+                  </InfoWindow> : null}
+                </Marker>);
       }
     });
 
