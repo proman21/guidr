@@ -40,3 +40,8 @@ $form-box-shadow-focus: $form-box-shadow, 0 0 5px adjust-color($action-color, $l
 // Animations
 $base-duration: 150ms;
 $base-timing: ease;
+
+// Media Queries
+$mobile: only screen and (max-width:740px);
+$tablet: only screen and (max-width:1050px);
+$desktop: only screen and (min-width:1051px);

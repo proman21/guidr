@@ -1,7 +1,9 @@
 @import 'common/bourbon/bourbon';
 @import 'common/base/base';
-@import './map/styles';
-@import './homepage/styles';
+@import 'common/font-awesome/font-awesome';
+@import 'common/bitters/flash';
+@import 'map/styles';
+@import 'homepage/styles';
 
 html, body {
   margin: 0;
