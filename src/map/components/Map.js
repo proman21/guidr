@@ -9,21 +9,20 @@ export default class Map extends Component {
     this.state = {
         marker: null,
         directions: null,
-        place: null,
-        currentFocus: null
+        currPlaceIndex: 0,
+        places: [{
+          geometry: {
+            location: { lat: -27.468124, lng: 153.023801 }
+          }
+        }],
+        currentFocus: null,
+        mode: "travelling"
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    this.refs.map.state.map.setOptions({
-      zoomControl: false,
-      scaleControl: false,
-      streetViewControl: false,
-      mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
-      },
-    });
+    //set directions if applicable
+    this.showDirections();
   }
 
   componentWillUnmount() {
@@ -43,17 +42,29 @@ export default class Map extends Component {
   }
 
   showDirections() {
-    let directionsService = new google.maps.DirectionService();
-    request = {
+    let directionsService = new google.maps.DirectionsService();
+    let request = {
       origin: this.props.userLoc,
-      destination: this.state.place.geometry.location,
+      destination: this.state.places[this.state.currPlaceIndex].geometry.location,
       travelMode: google.maps.TravelMode.WALKING
     };
     directionsService.route(request, (result, status) => {
       if (status == google.maps.DirectionsStatus.OK) {
-        this.setState({ directions: result });
+        if(result.routes[0].legs[0].distance.value < 100) {
+          this.setState({ directions: null, mode: "at-destination" });
+        } else {
+          this.setState({ directions: result, mode: "travelling" });
+        }
       }
     });
+  }
+
+  showMarkerName(index) {
+
+  }
+
+  centerOnUser() {
+    this.forceUpdate();
   }
 
   render() {
@@ -61,10 +72,23 @@ export default class Map extends Component {
 
     if(!this.props.background) {
       overlay = ReactUtils.createFragment({
-        controls: <Controls />,
+        controls: <Controls centerLoc={this.centerOnUser.bind(this)}/>,
         info_window: <InfoWindow />
       });
     }
+
+    //build markers for places, show only 10
+    let placeMarkers = this.state.places.slice(0, 10).map((place, i) => {
+      if(i == this.state.currPlaceIndex) {
+        // render a focussed marker
+        return (<Marker position={place.geometry.location} key={i}/>);
+      } else {
+        // render a normal marker
+        return (<Marker position={place.geometry.location} key={i}
+                 onClick={this.showMarkerName().bind(this, i)}/>);
+      }
+    });
+
     return (<div className="map-wrap">
       {overlay}
       <GoogleMap containerProps={{
@@ -74,12 +98,21 @@ export default class Map extends Component {
           },
         }}
         ref="map"
-        center={this.state.currentFocus || this.props.userLoc}
-        defaultZoom={15}>
-        // {this.state.directions ? <DirectionsRenderer directions={this.state.directions} /> : null}
+        center={this.props.userLoc}
+        defaultZoom={15}
+        options={{ zoomControl: false,
+                   scaleControl: false,
+                   streetViewControl: false,
+                   mapTypeControlOptions: {
+                     style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                     position: google.maps.ControlPosition.TOP_RIGHT
+                   }
+        }}>
+        {this.state.directions ? <DirectionsRenderer directions={this.state.directions} options={{suppressMarkers: true}} /> : null}
         // {this.state.place ? <Marker {...this.state.marker} /> : null}
         <Marker position={this.props.userLoc} key="user"
         icon="http://i.stack.imgur.com/orZ4x.png" />
+        {placeMarkers}
       </GoogleMap>
     </div>);
   }
