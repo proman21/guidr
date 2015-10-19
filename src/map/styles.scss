@@ -68,7 +68,11 @@
       @include flex(1);
       @include flex-grow(1);
       @include user-select(none);
+
+      @include display(flex);
+
       text-align: center;
+      height: 100%;
     }
   }
 

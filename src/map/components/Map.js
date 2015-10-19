@@ -1,7 +1,7 @@
 import React, {Component, addons as ReactUtils} from "react";
-import {GoogleMap, Marker, DirectionsRenderer} from "react-google-maps";
+import {GoogleMap, Marker, DirectionsRenderer, InfoWindow} from "react-google-maps";
 import Controls from "./Controls";
-import InfoWindow from "./InfoWindow";
+import InfoSlider from "./InfoSlider";
 
 export default class Map extends Component {
   constructor(props) {
@@ -12,10 +12,12 @@ export default class Map extends Component {
         currPlaceIndex: 0,
         places: [{
           name: "Brisbane City Hall",
+          info: "Stuff",
           showTitle: false,
           geometry: {
             location: { lat: -27.468124, lng: 153.023801 }
-          }
+          },
+          images: []
         }],
         mode: "travelling"
     };
@@ -28,18 +30,6 @@ export default class Map extends Component {
 
   componentWillUnmount() {
     geolocation.clearWatch();
-  }
-
-  createMarker() {
-    var details = {
-      position: this.state.place.geometry.location,
-      key: this.state.place.name
-    }
-    this.setState({ marker: details });
-  }
-
-  setPlace(place) {
-    this.setState({ place: place });
   }
 
   showDirections() {
@@ -61,7 +51,9 @@ export default class Map extends Component {
   }
 
   showMarkerName(index) {
-
+    this.setState(ReactUtils.update(this.state, {
+      places: { [index]: { showTitle: { $set: false } } }
+    }));
   }
 
   centerOnUser() {
@@ -74,7 +66,7 @@ export default class Map extends Component {
     if(!this.props.background) {
       overlay = ReactUtils.createFragment({
         controls: <Controls centerLoc={this.centerOnUser.bind(this)}/>,
-        info_window: <InfoWindow />
+        info_slider: <InfoSlider place={this.state.places[this.state.currPlaceIndex]}/>
       });
     }
 
@@ -113,7 +105,9 @@ export default class Map extends Component {
                      position: google.maps.ControlPosition.TOP_RIGHT
                    }
         }}>
-        {this.state.directions ? <DirectionsRenderer directions={this.state.directions} options={{suppressMarkers: true}} /> : null}
+        {this.state.directions ? <DirectionsRenderer
+                                  directions={this.state.directions}
+                                  options={{suppressMarkers: true}} /> : null}
         // {this.state.place ? <Marker {...this.state.marker} /> : null}
         <Marker position={this.props.userLoc} key="user"
         icon="http://i.stack.imgur.com/orZ4x.png" />

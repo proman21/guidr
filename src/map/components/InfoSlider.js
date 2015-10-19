@@ -1,9 +1,10 @@
-import React, {Component, addons} from "react/addons";
+import React, {Component, addons as ReactUtils} from "react/addons";
+import {Carousel} from "react-responsive-carousel";
 import ReactGestures from "react-gestures";
 import clsSet from "classnames";
-let ReactCSSTransitionGroup = addons.CSSTransitionGroup;
+let ReactCSSTransitionGroup = ReactUtils.CSSTransitionGroup;
 
-export default class InfoWindow extends Component {
+export default class InfoSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,14 +46,19 @@ export default class InfoWindow extends Component {
           onTap={this.toggleWindow.bind(this)}
           onSwipeUp={this.openWindow.bind(this)}
           onSwipeDown={this.closeWindow.bind(this)}>
-          <p className="title-wrap" onClick={this.toggleWindow.bind(this)}>University of Queensland</p>
+          <div className="title-wrap" onClick={this.toggleWindow.bind(this)}>
+            <p>{this.props.place.name}</p>
+          </div>
         </ReactGestures>
         <span className="right-arrow" className="button">
           <i className="fa fa-3x fa-caret-right"></i>
         </span>
       </span>
+      <span className="image-gallery">
+
+      </span>
       <span>
-        UQ's diverse facilities off-campus include the Pharmacy Australia Centre of Excellence and Translational Research Institute, marine research stations, mineral research centre, seismograph station, veterinary science teaching and research centres, UQ Business School Downtown, social science research at Long Pocket, and teaching hospitals, health centres and other medical research facilities. 
+        {this.props.place.info}
       </span>
     </div>);
   }
