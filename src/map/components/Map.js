@@ -92,6 +92,15 @@ export default class Map extends Component {
       }
     });
 
+    let mapOptions = { zoomControl: false,
+               scaleControl: false,
+               streetViewControl: false,
+               mapTypeControlOptions: {
+                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                 position: google.maps.ControlPosition.TOP_RIGHT
+               }
+    }
+
     return (<div className="map-wrap">
       {overlay}
       <GoogleMap containerProps={{
@@ -103,14 +112,7 @@ export default class Map extends Component {
         ref="map"
         center={this.props.userLoc}
         defaultZoom={15}
-        options={{ zoomControl: false,
-                   scaleControl: false,
-                   streetViewControl: false,
-                   mapTypeControlOptions: {
-                     style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                     position: google.maps.ControlPosition.TOP_RIGHT
-                   }
-        }}>
+        options={mapOptions}>
         {this.state.directions ? <DirectionsRenderer
                                   directions={this.state.directions}
                                   options={{suppressMarkers: true}} /> : null}

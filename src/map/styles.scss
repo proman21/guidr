@@ -44,6 +44,22 @@
   background-color: white;
   transition: transform .5s ease-out;
 
+  .image-gallery {
+    .img-pad {
+      @include display(flex);
+      @include flex-wrap(nowrap);
+      @include flex-direction(row);
+      @include align-items(center);
+      @include justify-content(center);
+      height: 120px;
+      padding: 10px;
+
+      .gallery-img {
+
+      }
+    }
+  }
+
   .top-bar {
     @include flex-wrap(wrap);
     @include display(flex);
@@ -70,9 +86,15 @@
       @include user-select(none);
 
       @include display(flex);
+      @include flex-direction(row);
+      @include align-items(center);
+      @include justify-content(center);
 
-      text-align: center;
       height: 100%;
+
+      p {
+        text-align: center;
+      }
     }
   }
 
