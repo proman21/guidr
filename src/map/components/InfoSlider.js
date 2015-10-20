@@ -1,5 +1,5 @@
 import React, {Component, addons as ReactUtils} from "react/addons";
-import {Carousel} from "react-responsive-carousel";
+import Slider from "react-slick";
 import ReactGestures from "react-gestures";
 import clsSet from "classnames";
 let ReactCSSTransitionGroup = ReactUtils.CSSTransitionGroup;
@@ -37,6 +37,14 @@ export default class InfoSlider extends Component {
       "open": this.state.open,
       "close": !this.state.open
     });
+
+    let sliderSettings = {
+      className: "image-gallery",
+      dots: true,
+      infinite: true,
+      arrows: true,
+      infinite: true
+    };
     return (<div ref="info" className={stateClasses}>
       <span className="top-bar">
         <span className="left-arrow" className="button">
@@ -54,8 +62,12 @@ export default class InfoSlider extends Component {
           <i className="fa fa-3x fa-caret-right"></i>
         </span>
       </span>
-      <span className="image-gallery">
-
+      <span className="image-gallery-wrap">
+        <Slider {...sliderSettings}>
+          {this.props.place.images.map(image => {
+            return <img src={image.url} key={image.url}></img>
+          })}
+        </Slider>
       </span>
       <span>
         {this.props.place.info}

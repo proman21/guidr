@@ -17,7 +17,13 @@ export default class Map extends Component {
           geometry: {
             location: { lat: -27.468124, lng: 153.023801 }
           },
-          images: []
+          images: [
+            {url: "https://www.museumofbrisbane.com.au/wp-content/uploads/2014/06/CSP_9666-1024x678.jpg"},
+            {url: "https://upload.wikimedia.org/wikipedia/commons/5/56/Brisbane_City_Hall_evening_lights.JPG"},
+            {url: "http://www.epicure.com.au/images/default-source/Rotator/Venue/bch-big-desktop/bch-3-big-desktop.jpg?sfvrsn=2&size=2600"},
+            {url: "http://www.weekendnotes.com/im/009/09/brisbane-city-hall41.JPG"},
+            {url: "http://www.epicure.com.au/images/default-source/Rotator/Venue/bch-big-desktop/bch-4-big-desktop.jpg?sfvrsn=2&size=2600"}
+          ]
         }],
         mode: "travelling"
     };
