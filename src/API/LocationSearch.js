@@ -20,6 +20,8 @@ const TROVE_ZONE = "newspaper";
 const TROVE_KEY = "miqepgv07q9ktath";
 
 const TROVE_URI = new URIT("http://api.trove.nla.gov.au/result{?params*}");
+
+const WIKI_URI = new URIT("https://en.wikipedia.org/w/api.php{?params*}");
 /**
  * The number of results to be returned from a trove search
  * @type {number}
@@ -74,16 +76,37 @@ export function checkTrove(place) {
       "n": NUM_RESULTS,
       "encoding": "json"
     };
+	
+	let wikiParams = {
+		"action": "query",
+		"titles": encodeURI(place.vicinity),
+		"format": "json",
+		"prop": "revisions",
+		"rvprop": "content"
+	}
 
     fetch(TROVE_URI.fillFromObject({ params }))
     .then(data => data.json())
     .then(msg => {
         if (msg.zone[0].records.n != 0) { //check if any results were returned
-          trovePlaces.push({
-            "troveData":msg,
-            "placesData": place
-          });
-        }
+		
+			fetch(WIKI_URI.fillFromObject({ wikiParams }))
+			.then(wikiData => wikiData.json())
+			.then(wikiMsg => {
+				var wikiPage;
+				if(!wikiMsg["query"]["pages"][0].hasOwnProperty("missing")) {
+					wikiPage = "https://en.wikipedia.org/wiki/"+encodeURI(place.vicinity);
+				}else {
+					wikiPage = "";
+				}
+				trovePlaces.push({
+					"troveData":msg,
+					"placesData": place,
+					"wikiPage": wikiPage
+				});
+			}
+        }else {
+		}
     });
 }
 
