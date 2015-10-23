@@ -8,7 +8,7 @@ export default class InfoSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: true
     };
   }
 
@@ -43,7 +43,8 @@ export default class InfoSlider extends Component {
       dots: true,
       infinite: true,
       arrows: true,
-      infinite: true
+      infinite: true,
+      slidesToShow: 3
     };
     return (<div ref="info" className={stateClasses}>
       <span className="top-bar">
@@ -65,7 +66,7 @@ export default class InfoSlider extends Component {
       <span className="image-gallery-wrap">
         <Slider {...sliderSettings}>
           {this.props.place.images.map(image => {
-            return <img src={image.url} key={image.url}></img>
+            return <div className="img-pad"><img className="gallery-img" src={image.url} key={image.url}></img></div>
           })}
         </Slider>
       </span>

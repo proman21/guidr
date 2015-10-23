@@ -91,7 +91,6 @@ export default class Map extends Component {
                 </Marker>);
       }
     });
-    
     let mapOptions = { zoomControl: true,
                    scaleControl: false,
                    streetViewControl: true,
@@ -107,7 +106,6 @@ export default class Map extends Component {
                      position: google.maps.ControlPosition.TOP_RIGHT
                    }                 
         };
-    
     return (<div className="map-wrap">
       {overlay}
       <GoogleMap containerProps={{
