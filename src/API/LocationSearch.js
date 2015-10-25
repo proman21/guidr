@@ -4,7 +4,7 @@ import URIT from 'uri-templates';
 /**
  * The list of places that are currently being worked with
  * @type {Array}
- * @format {troveData, placesData}
+ * @format {troveData, placesData, wikiPage}
  */
 var trovePlaces = [];
 /**
@@ -19,9 +19,13 @@ const TROVE_ZONE = "newspaper";
  */
 const TROVE_KEY = "miqepgv07q9ktath";
 
+const PLACES_KEY = "AIzaSyC9gyaugdvMP8v3mFl05yODLGa9RoXRZM0";
+
 const TROVE_URI = new URIT("http://api.trove.nla.gov.au/result{?params*}");
 
 const WIKI_URI = new URIT("https://en.wikipedia.org/w/api.php{?params*}");
+
+const PLACES_URI = new URIT("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
 /**
  * The number of results to be returned from a trove search
  * @type {number}
@@ -36,16 +40,19 @@ const NUM_RESULTS = 20;
  * @param interests An array of strings representing the interests for the places
  * @param radius The radius in which to search
  */
-export function getPlaces(mapObject, latitude, longitude, interests, radius) {
-    let location = new google.maps.LatLng(latitude, longitude);
+export function getPlaces(latitude, longitude, interests, radius) {
     let request = {
-        location: location,
-        radius: radius,
-        types: interests
+        "location": String(latitude)+","+String(longitude),
+        "radius": String(radius),
+        "types": encodeURI(interests)
     };
-
-    let service = new google.maps.places.PlacesService(mapObject);
-    service.nearbySearch(request, placesSearchCallback);
+	let req = PLACES_URI+"location="+request['location']+"&radius="+request["radius"]+"&types="+request["types"]+"&key="+PLACES_KEY;
+    fetch(req)
+    .then(data => JSON.parse(data))
+    .then(msg => {
+		alert(msg); //Dostuff
+      } 
+    );
 }
 
 /**
